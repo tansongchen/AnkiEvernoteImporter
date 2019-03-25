@@ -9,12 +9,12 @@ def p(sp, box): #把起始点坐标 (x,y) 和方块大小 (dx,dy) 转化为 crop
     return (sp[0], sp[1], sp[0]+box[0], sp[1]+box[1])
 
 # Part 2 功能函数
-def split_image(im, paras): #根据切割参数把图片切成10份
+def split_image(im, paras): #根据切割参数把图片切成11份
     """
     paras 结构如下：
     paras = (a, l, r, b, s)
-    l是左半页左上角的坐标，r是右半页左上角的坐标。b是半页纸的大小，s是四分之一页纸的大小。
-    lrbs都是K^2向量。
+    l是左半页左上角的坐标，r是右半页左上角的坐标。b是一页纸的大小，s是四分之一页纸的大小。
+    lrbs都是二维向量。
     """
     l, r, b, s = paras[1:]
     p1 = im.crop(p(l,s))
@@ -29,7 +29,7 @@ def split_image(im, paras): #根据切割参数把图片切成10份
     p58 = im.crop(p(r,b))
     return [im, p1, p2, p3, p4, p5, p6, p7, p8, p14, p58]
 
-def gen_info_and_media(course, ims, mode, cards, form):
+def gen_info_and_media(course, ims, mode, cardl, form):
     """
     输入：课程名称，切好的图片列表，切分模式，卡片列表，图片格式
     输出：
@@ -46,12 +46,17 @@ def gen_info_and_media(course, ims, mode, cards, form):
         iml = [p14, p5, p6, p7, p8]
     else:
         iml = [p1, p2, p3, p4, p58]
-    cardl = cards.split('|')
     for index in range(len(iml)):
-        card = cardl[index]
+        try:
+            card = cardl[index]
+        except IndexError:
+            print(cardl)
         if card:
             name = 'NOTE' + course[:3] + card + '.' + form
-            pos, que = card.split()
+            try:
+                pos, que = card.split(' ')
+            except ValueError:
+                print(card)
             iden = 'NOTE' + course[:3] + pos
             html = '<img src="' + name + '">'
             info_list_add.append((iden, pos, que, html, ''))
@@ -71,21 +76,22 @@ def write_media(media_list): #把图片写到媒体文件夹中
             img.save(media + '/' + name)
 
 def read_note_paras(course): #读取笔记参数
-    root = '/Users/tansongchen/文档/' + course
+    root = '/Users/tansongchen/documents/' + course
     f = open(root + '/笔记参数.txt', encoding = 'utf-8', mode = 'r')
     paras = tuple(tuple(map(int, line.strip('\r\n').split())) for line in f)
     return paras
 
 # Part 4 主操作函数，函数是针对一门课而言的
 def main(course):
-    root = '/Users/tansongchen/文档/' + course
+    root = '/Users/tansongchen/documents/' + course
     paras = read_note_paras(course)
     info_list, media_list = [], []
     f = open(root + '/笔记.txt', encoding = 'utf-8', mode = 'r')
     for line in f:
         num, form, mode, cards = line.strip('\r\n').split('\t')
-        cardl = [x for x in cards.split('|') if x != '']
-        r = all(map(lambda x: 'NOTE'+course[:3]+x+'.'+form in exist_image, cardl))
+        cardl = cards.split('｜')
+        realcardl = [x for x in cardl if x != '']
+        r = all(map(lambda x: 'NOTE'+course[:3]+x+'.'+form in exist_image, realcardl))
         if r:
             ims = [None]*11
         else:
@@ -93,7 +99,7 @@ def main(course):
             im = im.rotate(270, expand = True)
             im = im.resize(paras[0])
             ims = split_image(im, paras)
-        info_list_add, media_list_add = gen_info_and_media(course, ims, mode, cards, form)
+        info_list_add, media_list_add = gen_info_and_media(course, ims, mode, cardl, form)
         info_list += info_list_add
         media_list += media_list_add
     f.close()
