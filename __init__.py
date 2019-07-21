@@ -14,37 +14,61 @@ ACTIONS = ['', 'Q', 'A']
 # Note items that we can import into that are not note fields
 SPECIAL_FIELDS = ['Tags']
 
+def getQA(HTML):
+    QAList = []
+    soup = BeautifulSoup(HTML, "html.parser")
+    divl = soup.body.contents
+    QField, AField = '', ''
+    for div in divl:
+        divs = div.get_text()
+        if divs[:2] in ['q:', 'Q:', 'q：', 'Q：']:
+            if (QField, AField) != ('', ''):
+                QAList.append((QField, AField))
+            QField = str(div)
+            AField = ''
+        elif divs[:2] in ['a:', 'A:', 'a：', 'A：']:
+            AField = str(div)
+        else:
+            if AField == '':
+                QField = QField + str(div)
+            else:
+                AField = AField + str(div)
+    QAList.append((QField, AField))
+    return QAList
+
 def doMediaImport():
     # Raise the main dialog for the add-on and retrieve its result when closed.
-    # (path, model, fieldList, ok) = ImportSettingsDialog().getDialogResult()
     (HTMLFile, did, model, fieldList, ok) = ImportSettingsDialog().getDialogResult()
     if not ok:
         return
-    mw.progress.start(max=1, parent=mw, immediate=True)
-    newCount = 0
-    failure = False
     f = open(HTMLFile, encoding = 'utf-8', mode = 'r')
     HTML = f.read()
     f.close()
-    note = notes.Note(mw.col, model)
-    note.model()['did'] = did
-    for (field, actionIdx, special) in fieldList:
-        action = ACTIONS[actionIdx]
-        if action == '':
-            continue
-        elif action == "Q":
-            data = 'Q'
-        elif action == "A":
-            data = 'A'
+    QAList = getQA(HTML)
+    mw.progress.start(max=len(QAList), parent=mw, immediate=True)
+    newCount = 0
+    failure = False
+    for i, QA in enumerate(QAList):
+        note = notes.Note(mw.col, model)
+        note.model()['did'] = did
+        for (field, actionIdx, special) in fieldList:
+            action = ACTIONS[actionIdx]
+            if action == '':
+                continue
+            elif action == "Q":
+                data = QA[0]
+            elif action == "A":
+                data = QA[1]
 
-        if special and field == "Tags":
-            note.tags.append(data)
-        else:
-            note[field] = data
-    if not mw.col.addNote(note):
-        failure = True
-    newCount += 1
-    # mw.progress.update(value=i)
+            if special and field == "Tags":
+                note.tags.append(data)
+            else:
+                note[field] = data
+        if not mw.col.addNote(note):
+            failure = True
+            continue
+        newCount += 1
+        mw.progress.update(value=i)
     mw.progress.finish()
     mw.deckBrowser.refresh()
     if failure:
@@ -172,21 +196,11 @@ class ImportSettingsDialog(QDialog):
 
 
 def showCompletionDialog(newCount, did):
-    QMessageBox.about(mw, "笔记导入成功",
-"""
-<p>
-完成笔记导入，共生成了 %s 条新笔记。
-所有生成的笔记位于 %s 卡组中。
-</p>""" % newCount, did)
+    QMessageBox.about(mw, "笔记导入成功", "完成笔记导入，共生成了 %s 条新笔记。" % newCount)
 
 def showFailureDialog():
-    QMessageBox.about(mw, "笔记导入失败",
-"""
-<p>
-没有生成相应卡片。
-</p>
-""")
+    QMessageBox.about(mw, "笔记导入失败", "没有生成笔记。")
 
-action = QAction("Q&A 笔记导入", mw)
+action = QAction("从印象笔记导入", mw)
 action.triggered.connect(doMediaImport)
 mw.form.menuTools.addAction(action)

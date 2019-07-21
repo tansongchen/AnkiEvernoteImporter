@@ -38,7 +38,7 @@ class Ui_Form(object):
         self.deckArea.setObjectName("deckArea")
         self.horizontalLayout_21.addWidget(self.deckArea)
         self.verticalLayout.addLayout(self.horizontalLayout_21)
-        spacerItem = QtWidgets.QSpacerItem(0, 30, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        spacerItem = QtWidgets.QSpacerItem(0, 10, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         self.verticalLayout.addItem(spacerItem)
         self.gridLayout = QtWidgets.QGridLayout()
         self.gridLayout.setObjectName("gridLayout")
@@ -65,7 +65,7 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "Q&A 笔记导入"))
+        Form.setWindowTitle(_translate("Form", "从印象笔记导入"))
         self.label_3.setText(_translate("Form", "HTML 文件："))
         self.browse.setText(_translate("Form", "浏览"))
         self.label_4.setText(_translate("Form", "卡组："))

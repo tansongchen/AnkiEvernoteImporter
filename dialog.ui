@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Q&amp;A 笔记导入</string>
+   <string>从印象笔记导入</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -64,7 +64,7 @@
      <property name="sizeHint" stdset="0">
       <size>
        <width>0</width>
-       <height>30</height>
+       <height>10</height>
       </size>
      </property>
     </spacer>
