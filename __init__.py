@@ -194,7 +194,6 @@ class ImportSettingsDialog(QDialog):
             elif child.layout() is not None:
                 self.clearLayout(child.layout())
 
-
 def showCompletionDialog(newCount, did):
     QMessageBox.about(mw, "笔记导入成功", "完成笔记导入，共生成了 %s 条新笔记。" % newCount)
 
