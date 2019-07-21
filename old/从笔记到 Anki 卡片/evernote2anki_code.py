@@ -7,14 +7,25 @@ f = open('/Users/tansongchen/Public/Temp/paste.txt', encoding = 'utf-8', mode = 
 string = f.read()
 f.close()
 
+extension_configs = {
+    'extra': {},
+    'tables': {},
+    'codehilite': {
+    'linenums': True, 
+    'guess_lang': False
+    }
+}
+
 formula_inline = re.compile(r'(?<![\\\$])\$(?!\$)(.+?)\$')
 formula_block = re.compile(r'(?<!\\)\$\$\n(.+?)\n\$\$', re.S)
 formula_all = re.compile(r'(?<![\\\$])\$(?!\$).+?\$|(?<!\\)\$\$.+?\$\$', re.S)
-flag = re.compile(r'⚐')
+flag1 = re.compile(r'⚐')
+flag2 = re.compile(r'⚑')
 enter = re.compile(r'\n')
 lt = re.compile(r'\<')
 gt = re.compile(r'\>')
 amp = re.compile(r'\&')
+code_block = re.compile(r'```fortran(.+?)```')
 
 def process(section):
 	section_title, section_body = section.split('\n\n', 1)
@@ -24,18 +35,26 @@ def process(section):
 	for note_number, note_content in enumerate(note_l):
 		note_title, note_body = note_content.split('\n\n', 1)
 		formula_l = formula_all.findall(note_body)
-		note_body = formula_all.sub('⚐', note_body)
-		note_body = markdown.markdown(note_body)
-		note_body_l = flag.split(note_body)
-		note_body = ''
+		note_body = formula_inline.sub('⚐', note_body)
+		note_body = formula_block.sub('\n⚐\n', note_body)
+		code_l = code_block.findall(note_body)
+		note_body = code_block.sub('⚑', note_body)
+		for n, code in enumerate(code_l):
+			code = code_block.sub('```\n:::fortran\g<1>```', code)
+			code = enter.sub('<br />', code)
+			note_body = flag2.sub(code, note_body, 1)
+		note_body = markdown.markdown(note_body, extensions = extension_configs)
+		formulae = []
 		for n, formula in enumerate(formula_l):
 			formula = formula_inline.sub('[$]\g<1>[/$]', formula)
 			formula = formula_block.sub('[$$]\g<1>[/$$]', formula)
 			formula = amp.sub('&amp;', formula)
 			formula = lt.sub('&lt;', formula)
 			formula = gt.sub('&gt;', formula)
-			note_body += (note_body_l[n] + formula)
-		note_body += note_body_l[-1]
+			formulae.append(formula)
+		note_body_l = flag1.split(note_body)
+		note_body = ''.join([note_body_l[i]+formulae[i] for i in range(len(formulae))]) + note_body_l[-1]
+		#note_body = flag1.sub(formula, note_body, 1)
 		note_body = enter.sub('<none>', note_body)
 		position = ['0%s%s%s%02d' % (metadata_l[0], metadata_l[2], section_title_l[0], note_number+1)]
 		data_l = position + metadata_l + section_title_l + ['%02d' % (note_number+1), note_title, note_body]
