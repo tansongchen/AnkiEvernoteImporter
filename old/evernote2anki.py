@@ -16,6 +16,18 @@ lt = re.compile(r'\<')
 gt = re.compile(r'\>')
 amp = re.compile(r'\&')
 
+note_type = 'basic'
+# note_type = 'course'
+
+extension_configs = {
+    'extra': {},
+    'tables': {},
+    'codehilite': {
+    'linenums': True, 
+    'guess_lang': False
+    }
+}
+
 def process(section):
 	section_title, section_body = section.split('\n\n', 1)
 	section_title_l = section_title.split(' ', 1)
@@ -37,13 +49,20 @@ def process(section):
 			formula = gt.sub('&gt;', formula)
 			note_body += (formula + note_body_l[n+1])
 		note_body = enter.sub('', note_body)
-		position = ['0%s%s%s%02d' % (metadata_l[0], metadata_l[2], section_title_l[0], note_number+1)]
-		data_l = position + metadata_l + section_title_l + ['%02d' % (note_number+1), note_title, note_body]
+		if ( note_type == 'course' ):
+			position = ['0%s%s%s%02d' % (metadata_l[0], metadata_l[2], section_title_l[0], note_number+1)]
+			data_l = position + metadata_l + section_title_l + ['%02d' % (note_number+1), note_title, note_body]
+		else:
+			data_l = [note_title, note_body]
 		section_output_l.append(data_l)
 	return section_output_l
 
-metadata, content = string.split('\n\n', 1)
-metadata_l = metadata.split(': ')[1].split('｜')
+if ( note_type == 'course' ):
+	metadata, content = string.split('\n\n', 1)
+	metadata_l = metadata.split(': ')[1].split('｜')
+else:
+	content = string
+
 section_l = content[2:].split('\n\n# ')
 note_l = sum(list(map(process, section_l)), [])
 string = '\n'.join('\t'.join(x) for x in note_l)
