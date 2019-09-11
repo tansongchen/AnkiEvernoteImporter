@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>从印象笔记导入</string>
+   <string>从 HTML 或 Markdown 文档导入……</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>HTML 文件：</string>
+        <string>文档：</string>
        </property>
       </widget>
      </item>

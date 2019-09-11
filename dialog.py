@@ -65,8 +65,8 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         _translate = QtCore.QCoreApplication.translate
-        Form.setWindowTitle(_translate("Form", "从印象笔记导入"))
-        self.label_3.setText(_translate("Form", "HTML 文件："))
+        Form.setWindowTitle(_translate("Form", "从 HTML 或 Markdown 文档导入……"))
+        self.label_3.setText(_translate("Form", "文档："))
         self.browse.setText(_translate("Form", "浏览"))
         self.label_4.setText(_translate("Form", "卡组："))
         self.label.setText(_translate("Form", "选择笔记类型"))

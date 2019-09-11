@@ -1,69 +1,72 @@
-# Evernote2Anki
+本插件是一款与小能熊终身学习学院「知识内化训练营」配套的笔记自动化导入插件。
 
-与小能熊终身学习学院「知识内化训练营」配套的笔记自动化导入插件。源代码由两个文件组成：
+# 特性
 
-1. `__init__.py`：展示导入界面，操作数据库
-2. `dialog.ui`：导入界面的具体配置
+## 导入普通笔记（以 Q/A 为卡片分隔）
 
-而 `dialog.py` 是用 `PyQt` 自动生成的界面程序。编译命令为：
+- 支持行内元素：加粗、斜体、下划线、颜色、高亮、字体字号
+- 支持块元素：有序和无序列表、表格、分割线、代码块
+- 支持图片（和笔记同时导出）
+  
+## 导入 Markdown 笔记（以 h2 为卡片分隔）
 
-```bash
-pyuic5 -o dialog.py dialog.ui
-```
+- 支持行内元素：加粗、斜体、下划线、删除线、超链接、行内代码和公式
+- 支持块元素：有序和无序列表、标题、引用、分割线、图片、代码块和公式块
 
-`/old/` 中存放了以前的一些自动化的尝试，供参考。
+# 准备
 
-`/bs4/` 是本插件解析 HTML 所依赖的 Beautiful Soup 库。未来可能会添加解析 Markdown 的库。
+- 安装 Anki 2.1 for Windows / macOS
+- 获取插件 ID 并安装
 
-# 开发进度
+# 使用
+
+- 将笔记导出为 HTML 格式，然后点选 Tools - 「从 HTML 或 Markdown 文档导入」。
+- 注意在印象笔记中「问题」必须以 Q：开头，「答案」必须以 A：开头，行数不限。
+
+# 已知问题
+
+- Markdown 不支持表格
+
+# 更改日志
+
+## 【未发布】｜version 1.0
+
+## 2019 年 9 月 10 日｜version 0.2
+
+### 添加
+
+- 基本实现 Markdown 解析功能
+- 可以同时导入 HTML 文件同一目录下的媒体文件
+
+### 修正
+
+- 改善用户界面
+- 修正界面卡住的问题
 
 ## 2019 年 7 月 21 日｜version 0.1
 
-基于「Media Import」插件修改，目前已经实现：
+### 添加
 
-### 导入对话框编写
+- 导入对话框编写
+- 基本实现 HTML 解析功能（用 Beautiful Soup 4 库完成解析）。
 
-![](http://img.candobear.com/2019-07-21-133414.png)
+# 源码说明
 
-- 选择（由印象笔记导出的）HTML 文件；
-- 选择导入卡组；
-- 选择笔记类型；
-- 将 Q 字段和 A 字段对应到正面和背面。
+## 源码结构
 
-### 基本实现 HTML 解析功能
+源代码的核心部分由三个文件组成：
 
-用 Beautiful Soup 4 库解析，其中关键算法为：
+1. `__init__.py`：展示导入界面，操作数据库
+2. `dialog.ui`：导入界面的具体配置
+3. `dialog.py` 是用 `PyQt` 自动生成的界面程序。编译命令为：`pyuic5 -o dialog.py dialog.ui`。
 
-```python
-def getQA(HTML):
-	QAList = []
-	soup = BeautifulSoup(HTML, "html.parser")
-	divl = soup.body.contents
-	QField, AField = '', ''
-	for div in divl:
-		divs = div.get_text()
-		if divs[:2] in ['q:', 'Q:', 'q：', 'Q：']:
-			if (QField, AField) != ('', ''):
-				QAList.append((QField, AField))
-			QField = str(div)
-			AField = ''
-		elif divs[:2] in ['a:', 'A:', 'a：', 'A：']:
-			AField = str(div)
-		else:
-			if AField == '':
-				QField = QField + str(div)
-			else:
-				AField = AField + str(div)
-	QAList.append((QField, AField))
-	return QAList
-```
+另外还有两个依赖的 Python 第三方库：
 
-该算法的鲁棒性正在进行测试，可能有更好的算法。
+- `/bs4/` 是本插件解析 HTML 所依赖的 Beautiful Soup 库。
+- `/markdown/` 是本插件解析 Markdown 所依赖的 Markdown 库。
 
-# 预告
+## 加入开发
 
-- Markdown 解析功能
-- 导入时如有第一字段相同，覆盖/不变/重复的选项
-- 与印象笔记 API 连接
-- ……
-
+- 你可以在插件页面上添加评论，或在插件的 [GitHub 页面](https://github.com/tansongchen/Evernote2Anki) 提交 Issues；
+- 你可以联系我的邮箱 tansongchen@pku.edu.cn；
+- 你可以在【An 部就班】微信群中找到我。
