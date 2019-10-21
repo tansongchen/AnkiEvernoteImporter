@@ -89,7 +89,7 @@ def getQAFromMarkdown(md, level):
     block_list = []
     index = None
     for match in heading_match_iter:
-        if index and md[index:index + level] == '#' * level:
+        if index != None and md[index:index + level] == '#' * level:
             block_list.append(md[index:match.start()])
         index = match.start()
     block_list.append(md[index:])
@@ -147,7 +147,7 @@ def doImport():
     (file, did, model, fieldList, ok) = ImportSettingsDialog().getDialogResult()
     if not ok: return
     if os.path.splitext(file)[-1] == '.html':
-        ACTIONS = ACTIONS + ['标签']
+        # ACTIONS += ['标签']
         f = open(file, encoding = 'utf-8', mode = 'r')
         source = f.read()
         f.close()
@@ -177,7 +177,7 @@ def doImport():
         f.close()
         QAList = getQAFromMarkdown(source, level)
         metaDict = getMetaFromMarkdowm(source)
-        ACTIONS += metaDict.keys()
+        # ACTIONS += metaDict.keys()
     mw.progress.start(max=len(QAList), parent=mw, immediate=True)
     newCount = 0
     for i, QA in enumerate(QAList):

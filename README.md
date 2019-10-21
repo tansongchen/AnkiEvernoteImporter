@@ -2,7 +2,7 @@
 
 # 特性
 
-## 导入普通笔记（以 Q/A 为卡片分隔）
+## 导入普通笔记（以「Q：A：」为卡片分隔）
 
 - 支持行内元素：加粗、斜体、下划线、颜色、高亮、字体字号
 - 支持块元素：有序和无序列表、表格、分割线、代码块
@@ -16,16 +16,28 @@
 # 准备
 
 - 安装 Anki 2.1 for Windows / macOS
-- 获取插件 ID 并安装
+- 在下方获取插件 ID 并在 Anki 中安装
 
 # 使用
 
-- 将笔记导出为 HTML 格式，然后点选 Tools - 「从 HTML 或 Markdown 文档导入」。
-- 注意在印象笔记中「问题」必须以 Q：开头，「答案」必须以 A：开头，行数不限。
+Step 1：在印象笔记中制作 Q&A 笔记，注意「问题」必须以 Q：开头，「答案」必须以 A：开头，它们的行数不限；
+
+![](http://img.candobear.com/2019-10-06-050738.png)
+
+Step 2：在印象笔记中将笔记导出为 HTML 格式；
+
+![](http://img.candobear.com/2019-10-06-050821.png)
+
+Step 3：在 Anki 中点选 工具（Tools） - 「从 HTML 或 Markdown 文档导入」，并根据界面指示操作。
+
+![](http://img.candobear.com/2019-10-06-051050.png)
+
+![](http://img.candobear.com/2019-10-06-051244.png)
 
 # 已知问题
 
-- Markdown 不支持表格
+- 在 HTML 中，「Q：」和「A：」必须直接位于一行的开始，而不能将它们放到代码块中；
+- 在 Markdown 中不支持表格
 
 # 更改日志
 
@@ -58,7 +70,7 @@
 
 1. `__init__.py`：展示导入界面，操作数据库
 2. `dialog.ui`：导入界面的具体配置
-3. `dialog.py` 是用 `PyQt` 自动生成的界面程序。编译命令为：`pyuic5 -o dialog.py dialog.ui`。
+3. `dialog.py` 是用 `PyQt` 自动生成的界面程序。编译命令为：。
 
 另外还有两个依赖的 Python 第三方库：
 
