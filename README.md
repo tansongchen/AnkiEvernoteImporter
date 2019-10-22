@@ -62,21 +62,6 @@ Step 3：在 Anki 中点选 工具（Tools） - 「从 HTML 或 Markdown 文档�
 - 导入对话框编写
 - 基本实现 HTML 解析功能（用 Beautiful Soup 4 库完成解析）。
 
-# 源码说明
-
-## 源码结构
-
-源代码的核心部分由三个文件组成：
-
-1. `__init__.py`：展示导入界面，操作数据库
-2. `dialog.ui`：导入界面的具体配置
-3. `dialog.py` 是用 `PyQt` 自动生成的界面程序。编译命令为：。
-
-另外还有两个依赖的 Python 第三方库：
-
-- `/bs4/` 是本插件解析 HTML 所依赖的 Beautiful Soup 库。
-- `/markdown/` 是本插件解析 Markdown 所依赖的 Markdown 库。
-
 ## 加入开发
 
 - 你可以在插件页面上添加评论，或在插件的 [GitHub 页面](https://github.com/tansongchen/Evernote2Anki) 提交 Issues；
