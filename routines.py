@@ -30,7 +30,10 @@ def test():
 def getQAFromHTML(HTML):
     QAList = []
     soup = BeautifulSoup(HTML, "html.parser")
-    divl = soup.body.contents
+    if 'Mac' in soup.select_one('head meta[name="exporter-version"]')['content']:
+        divl = soup.select('body div')
+    else:
+        divl = soup.select('body div span div')
     QField, AField = '', ''
     for div in divl:
         divs = div.get_text()
@@ -42,10 +45,10 @@ def getQAFromHTML(HTML):
         elif divs[:2] in ['a:', 'A:', 'a：', 'A：']:
             AField = str(div)
         else:
-            if AField == '':
-                QField = QField + str(div)
-            else:
+            if AField:
                 AField = AField + str(div)
+            elif QField:
+                QField = QField + str(div)
     QAList.append((QField, AField))
     return QAList
 
@@ -69,7 +72,14 @@ def getQAFromMarkdown(md, level):
     lt = re.compile(r'\<')
     gt = re.compile(r'\>')
     amp = re.compile(r'\&')
-    # extension_configs = {'extra': {}, 'tables': {}}
+    extension_configs = {
+        'extra': {},
+        'tables': {},
+        'codehilite': {
+            'linenums': True,
+            'guess_lang': False
+        }
+    }
     heading = re.compile(r'^#{1,%s} ' % level, re.M)
 
     heading_match_iter = heading.finditer(md)
@@ -111,7 +121,7 @@ def getQAFromMarkdown(md, level):
         AField_l = code_flag.split(AField)
         AField = AField_l[0]
         for n, code in enumerate(code_l):
-            code = markdown.markdown(code)
+            code = markdown.markdown(code, extensions=['markdown.extensions.fenced_code', 'markdown.extensions.codehilite'], extension_configs=extension_configs)
             code = enter.sub('<br />', code)
             AField += (code + AField_l[n+1])
         QAList.append((QField, AField))

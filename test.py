@@ -11,4 +11,6 @@ f = open('example.html', encoding='utf-8', mode='r')
 HTML = f.read()
 f.close()
 
-# print(getQAFromMarkdown(MD, 2))
+for QA in getQAFromHTML(HTML):
+    print(QA)
+# getQAFromMarkdown(HTML, 2)

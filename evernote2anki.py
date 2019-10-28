@@ -13,12 +13,12 @@ lt = re.compile(r'\<')
 gt = re.compile(r'\>')
 amp = re.compile(r'\&')
 extension_configs = {
-    'extra': {},
-    'tables': {},
-    'codehilite': {
-    'linenums': True, 
-    'guess_lang': False
-    }
+    # 'extra': {},
+    # 'tables': {},
+    # 'codehilite': {
+    # 'linenums': True, 
+    # 'guess_lang': False
+    # }
 }
 
 def process(section):
