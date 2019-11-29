@@ -43,6 +43,12 @@ Step 3：在 Anki 中点选 工具（Tools） - 「从 HTML 或 Markdown 文档�
 
 ## 【未发布】｜version 1.0
 
+## 2019 年 10 月 29 日｜version 0.2.1
+
+### 修正
+
+- 修正 Windows 下 HTML 解析
+
 ## 2019 年 9 月 10 日｜version 0.2
 
 ### 添加

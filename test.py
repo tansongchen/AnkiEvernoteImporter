@@ -7,7 +7,7 @@ f = open('example.md', encoding='utf-8', mode='r')
 MD = f.read()
 f.close()
 
-f = open('example.html', encoding='utf-8', mode='r')
+f = open('example_snrt.html', encoding='utf-8', mode='r')
 HTML = f.read()
 f.close()
 

@@ -30,13 +30,21 @@ def test():
 def getQAFromHTML(HTML):
     QAList = []
     soup = BeautifulSoup(HTML, "html.parser")
+    ul_tags = soup.find_all('ul')
+    for ul in ul_tags:
+        new_div_tag = soup.new_tag('div')
+        ul.wrap(new_div_tag)
+    ol_tags = soup.find_all('ol')
+    for ol in ol_tags:
+        new_div_tag = soup.new_tag('div')
+        ol.wrap(new_div_tag)
     if 'Mac' in soup.select_one('head meta[name="exporter-version"]')['content']:
-        divl = soup.select('body div')
+        divl = soup.select('body > div')
     else:
-        divl = soup.select('body div span div')
+        divl = soup.select('body > div > span > div')
     QField, AField = '', ''
     for div in divl:
-        divs = div.get_text()
+        divs = div.get_text().strip()
         if divs[:2] in ['q:', 'Q:', 'q：', 'Q：']:
             if (QField, AField) != ('', ''):
                 QAList.append((QField, AField))
