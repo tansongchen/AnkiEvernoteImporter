@@ -30,33 +30,29 @@ def test():
 def getQAFromHTML(HTML):
     QAList = []
     soup = BeautifulSoup(HTML, "html.parser")
-    ul_tags = soup.find_all('ul')
-    for ul in ul_tags:
-        new_div_tag = soup.new_tag('div')
-        ul.wrap(new_div_tag)
-    ol_tags = soup.find_all('ol')
-    for ol in ol_tags:
-        new_div_tag = soup.new_tag('div')
-        ol.wrap(new_div_tag)
+    # blocks = soup.find_all('body > *')
+    # for block in blocks:
+    #     print(block.get_text())
+    #     if block.name != 'div': block.wrap(soup.new_tag('div'))
     if 'Mac' in soup.select_one('head meta[name="exporter-version"]')['content']:
-        divl = soup.select('body > div')
+        blockList = soup.select('body > *')
     else:
-        divl = soup.select('body > div > span > div')
+        blockList = soup.select('body > div > span > *')
     QField, AField = '', ''
-    for div in divl:
-        divs = div.get_text().strip()
-        if divs[:2] in ['q:', 'Q:', 'q：', 'Q：']:
+    for block in blockList:
+        string = block.get_text().strip()
+        if string[:2] in ['q:', 'Q:', 'q：', 'Q：']:
             if (QField, AField) != ('', ''):
                 QAList.append((QField, AField))
-            QField = str(div)
+            QField = str(block)
             AField = ''
-        elif divs[:2] in ['a:', 'A:', 'a：', 'A：']:
-            AField = str(div)
+        elif string[:2] in ['a:', 'A:', 'a：', 'A：']:
+            AField = str(block)
         else:
             if AField:
-                AField = AField + str(div)
+                AField = AField + str(block)
             elif QField:
-                QField = QField + str(div)
+                QField = QField + str(block)
     QAList.append((QField, AField))
     return QAList
 
