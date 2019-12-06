@@ -2,16 +2,23 @@ from bs4 import BeautifulSoup
 import re
 import markdown
 from urllib.parse import quote
+import os
 
 def addMediaPointer(HTML, mediaDict):
     soup = BeautifulSoup(HTML, "html.parser")
     for mediaRelativePath, (mediaName, mediaType) in mediaDict.items():
         if mediaType == 'AUDIO':
+            for item in soup.select('a[href="%s"]' % mediaRelativePath):
+                audioSpan = soup.new_tag('span')
+                audioSpan.string = '[sound:%s]' % mediaName
+                item.replace_with(audioSpan)
             for item in soup.select('a[href="%s"]' % quote(mediaRelativePath)):
                 audioSpan = soup.new_tag('span')
                 audioSpan.string = '[sound:%s]' % mediaName
                 item.replace_with(audioSpan)
         elif mediaType == 'IMAGE':
+            for item in soup.select('img[src="%s"]' % mediaRelativePath):
+                item['src'] = mediaName
             for item in soup.select('img[src="%s"]' % quote(mediaRelativePath)):
                 item['src'] = mediaName
         else:
@@ -34,10 +41,13 @@ def getQAFromHTML(HTML):
     # for block in blocks:
     #     print(block.get_text())
     #     if block.name != 'div': block.wrap(soup.new_tag('div'))
-    if 'Mac' in soup.select_one('head meta[name="exporter-version"]')['content']:
+    try:
+        if 'Mac' in soup.select_one('head meta[name="exporter-version"]')['content']:
+            blockList = soup.select('body > *')
+        else:
+            blockList = soup.select('body > div > span > *')
+    except Exception:
         blockList = soup.select('body > *')
-    else:
-        blockList = soup.select('body > div > span > *')
     QField, AField = '', ''
     for block in blockList:
         string = block.get_text().strip()

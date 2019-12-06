@@ -23,9 +23,12 @@ def doImport():
         f = open(file, encoding = 'utf-8', mode = 'r')
         source = f.read()
         f.close()
-        mediaDir = os.path.splitext(file)[0] + '.resources'
         # 检查同目录下是否有 Evernote 自动生成的 .resources 目录，如果有则导入媒体文件，如果没有则不导入
-        if os.path.exists(mediaDir):
+        if os.path.exists(os.path.splitext(file)[0] + '.resources'):
+            mediaDir = os.path.splitext(file)[0] + '.resources'
+            mediaList = os.listdir(mediaDir)
+        elif os.path.exists(os.path.splitext(file)[0] + '_files'):
+            mediaDir = os.path.splitext(file)[0] + '_files'
             mediaList = os.listdir(mediaDir)
         else:
             mediaList = []
