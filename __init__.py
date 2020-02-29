@@ -38,7 +38,9 @@ def doImport():
             if os.path.isfile(file) and mediaExt in AUDIO + IMAGE:
                 mediaPath = os.path.join(mediaDir, media)
                 mediaName = mw.col.media.addFile(mediaPath)
-                mediaRelativePath = os.path.join(os.path.basename(mediaDir), media)
+                # 在 Windows 下的 HTML 里路径也是斜杠而不是反斜杠，所以这里用错了
+                # mediaRelativePath = os.path.join(os.path.basename(mediaDir), media)
+                mediaRelativePath = '%s/%s' % (os.path.basename(mediaDir), media)
                 if mediaExt in AUDIO:
                     mediaDict[mediaRelativePath] = (mediaName, 'AUDIO')
                 else:
