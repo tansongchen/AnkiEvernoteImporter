@@ -15,8 +15,8 @@ SPECIAL_FIELDS = ['Tags']
 
 def doImport():
     # Raise the main dialog for the add-on and retrieve its result when closed.
-    level = 2
-    (file, did, model, fieldList, ok) = ImportSettingsDialog().getDialogResult()
+    #level = 2
+    (file, did, model, fieldList, level,ok) = ImportSettingsDialog().getDialogResult()
     if not ok: return
     if os.path.splitext(file)[-1] == '.html':
         # ACTIONS += ['标签']
@@ -158,15 +158,18 @@ class ImportSettingsDialog(QDialog):
         - 卡组
         - 笔记类型
         - 导入信息与笔记类型各领域的对应关系
+        - 分割层级
         - 是否导入
         """
 
-        if self.result() == QDialog.Rejected: return None, None, None, None, False
+        if self.result() == QDialog.Rejected: return None, None, None, None,None, False
 
         model = self.form.modelList.currentItem().model
         # Iterate the grid rows to populate the field map
         fieldList = []
         did = self.deck.selectedId()
+        level = self.form.level.currentText()
+        level = int(level)
         grid = self.form.fieldMapGrid
         for row in range(self.fieldCount):
             # QLabel with field name
@@ -176,7 +179,7 @@ class ImportSettingsDialog(QDialog):
             # QComboBox with index from the action list
             actionIdx = grid.itemAtPosition(row, 1).widget().currentIndex()
             fieldList.append((field, actionIdx, special))
-        return self.mediaDir, did, model, fieldList, True
+        return self.mediaDir, did, model, fieldList,level, True
 
     def onBrowse(self):
         """
