@@ -60,6 +60,20 @@ class Ui_Form(object):
         self.gridLayout.addWidget(self.buttonBox, 5, 3, 1, 1)
         self.verticalLayout.addLayout(self.gridLayout)
 
+        self.label_5 = QtWidgets.QLabel(Form)
+        self.label_5.setObjectName("label_5")
+        self.horizontalLayout_2.addWidget(self.label_5)
+        self.gridLayout.addWidget(self.label_5, 4, 0, 1, 1)
+        self.level = QtWidgets.QComboBox(Form)
+        self.level.addItem('2')
+        self.level.addItem('3')
+        self.level.addItem('4')
+        self.level.addItem('5')
+        self.level.addItem('6')
+        self.level.setCurrentIndex(0)
+        self.horizontalLayout_2.addWidget(self.level)
+        self.gridLayout.addWidget(self.level, 4, 3, 1, 1)
+        
         self.retranslateUi(Form)
         QtCore.QMetaObject.connectSlotsByName(Form)
 
@@ -71,3 +85,4 @@ class Ui_Form(object):
         self.label_4.setText(_translate("Form", "卡组："))
         self.label.setText(_translate("Form", "选择笔记类型"))
         self.label_2.setText(_translate("Form", "对应字段"))
+        self.label_5.setText(_translate("Form", "输入层级"))
