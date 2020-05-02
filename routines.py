@@ -45,7 +45,7 @@ def getQAFromHTML(HTML):
         if 'Mac' in soup.select_one('head meta[name="exporter-version"]')['content']:
             blockList = soup.select('body > *')
         else:
-            blockList = soup.select('body > div > span > *')
+            blockList = soup.select('body > div > span > div > *')
     except Exception:
         blockList = soup.select('body > *')
     QField, AField = '', ''
