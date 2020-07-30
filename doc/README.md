@@ -1,9 +1,14 @@
 # 安装
 
-- 在 [Anki 官网](https://apps.ankiweb.net/) 下载并安装 Anki 2.1
-- 获取并安装插件
-  - 自动安装：在 [Evernote2Anki 插件页面] 获取插件 ID，并在 Anki 的 Tools - Add-ons 界面点击 Get Addons ... 并输入 ID 安装；
-  - 手动安装：在发布页面下载压缩文件 `Evernote2Anki.zip`，并在 Anki 的 Tools - Add-ons 界面点击 Install from file ... 安装；
+在安装本插件前，请确认您已经安装 Anki 2.1.x。
+
+## 自动安装
+
+在 Anki 的 `Tools` - `Add-ons` 界面点击 `Get Addons ...` 并输入 ID 831016260 安装。
+
+## 手动安装
+
+在 [GitHub 发布页面](https://github.com/tansongchen/AnkiEvernoteImporter/releases) 下载压缩文件 `EvernoteImporter.ankiaddon`，并在 Anki 的 `Tools` - `Add-ons` 界面点击 `Install from file ...` 安装。
 
 # 使用（超级笔记）
 
@@ -11,13 +16,17 @@
 
 在印象笔记中新建超级笔记：
 
+![](https://gitee.com/tansongchen/ImageHost/raw/master/2020/07/30/12-44-30.png)
+
 ## 从印象笔记导出
 
-在印象笔记中将笔记导出为 HTML 格式：
+在印象笔记中点击 `文件` - `导出笔记`，将笔记导出为 HTML 格式：
+
+![](https://gitee.com/tansongchen/ImageHost/raw/master/2020/07/30/12-45-18.png)
 
 ## 从 Anki 导入
 
-在 Anki 的 Tools 界面点击「从 HTML 或 Markdown 文档导入……」，并根据界面指示操作。
+在 Anki 的 `Tools` 界面点击 `从印象笔记导入……`，并根据界面指示操作。
 
 # 使用（Markdown 笔记）
 
@@ -25,13 +34,17 @@
 
 在印象笔记中新建 Markdown 笔记：
 
+![](https://gitee.com/tansongchen/ImageHost/raw/master/2020/07/30/12-46-38.png)
+
 ## 从印象笔记导出
 
-在印象笔记中将笔记导出为 Markdown 格式：
+在印象笔记中右键点击 Markdown 笔记的预览区，将笔记导出为 Markdown 格式：
+
+![](https://gitee.com/tansongchen/ImageHost/raw/master/2020/07/30/12-48-37.png)
 
 ## 从 Anki 导入
 
-在 Anki 的 Tools 界面点击「从 HTML 或 Markdown 文档导入……」，并根据界面指示操作。
+在 Anki 的 `Tools` 界面点击 `从印象笔记导入……`，并根据界面指示操作。
 
 # 特性
 

@@ -217,6 +217,6 @@ def doImport():
     mw.reset()
     showCompletionDialog(newCount)
 
-menu = QAction('从 HTML 或 Markdown 文档导入……', mw)
+menu = QAction('从印象笔记导入……', mw)
 menu.triggered.connect(doImport)
 mw.form.menuTools.addAction(menu)
