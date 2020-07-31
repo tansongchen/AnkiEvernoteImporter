@@ -3,6 +3,7 @@
 '''
 
 import os
+from urllib.parse import quote
 from bs4 import BeautifulSoup
 from aqt import mw
 from aqt.qt import *
@@ -148,6 +149,11 @@ def showCompletionDialog(newCount):
 def showFailureDialog(reason):
     QMessageBox.about(mw, '笔记导入失败', '没有生成笔记。原因是：%s。' % reason)
 
+def getOldMediaPathList(baseName, media):
+    slashStylePath = '%s/%s' % (baseName, media)
+    backslashStylePath = '%s\\\\%s' % (baseName, media)
+    return [slashStylePath, backslashStylePath, quote(slashStylePath), quote(backslashStylePath)]
+
 def extractFrom(fileName, level):
     fileBaseName, fileExt = os.path.splitext(fileName)
     with open(fileName, encoding='utf-8', mode='r') as f:
@@ -167,13 +173,14 @@ def extractFrom(fileName, level):
         for media in mediaList:
             mediaExt = os.path.splitext(media)[-1][1:].lower()
             if mediaExt in audio + pics:
-                mediaPath = os.path.join(mediaDir, media)
-                mediaName = mw.col.media.addFile(mediaPath)
-                mediaRelativePath = '%s/%s' % (os.path.basename(mediaDir), media)
+                oldMediaAbsolutePath = os.path.join(mediaDir, media)
+                newMediaPath = mw.col.media.addFile(oldMediaAbsolutePath)
+                baseName = os.path.basename(mediaDir)
+                oldMediaPathList = getOldMediaPathList(baseName, media)
                 if mediaExt in audio:
-                    audioDict[mediaRelativePath] = mediaName
+                    audioDict[newMediaPath] = oldMediaPathList
                 else:
-                    picsDict[mediaRelativePath] = mediaName
+                    picsDict[newMediaPath] = oldMediaPathList
         soup = BeautifulSoup(text, 'html.parser')
         updateMedia(soup, audioDict, picsDict)
         meta = soup.select_one('head meta[name="content-class"]')

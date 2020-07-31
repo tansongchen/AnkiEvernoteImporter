@@ -8,7 +8,32 @@
 
 ## 手动安装
 
-在 [GitHub 发布页面](https://github.com/tansongchen/AnkiEvernoteImporter/releases) 下载压缩文件 `EvernoteImporter.ankiaddon`，并在 Anki 的 `Tools` - `Add-ons` 界面点击 `Install from file ...` 安装。
+在 [GitHub 发布页面](https://github.com/tansongchen/AnkiEvernoteImporter/releases) 下载压缩文件 `EvernoteImporter.ankiaddon`，双击安装。
+
+# 原理
+
+在印象笔记中，无论是超级笔记还是 Markdown 笔记，都可以通过各级标题（超级笔记支持一至三级标题，Markdown 笔记支持一至六级标题）的使用来形成结构化的笔记文档。本插件利用了这一特性，将特定级别的标题识别为 Anki 卡片的正面，而把该标题下的内容识别为 Anki 卡片的背面。
+
+更加严谨地说，若在导入界面设置标题层级为 N，则每个 N 级标题都会成为一张 Anki 卡片的正面，这张卡片对应的背面内容是笔记文档中「从该标题开始（不含），到下一个层级小于或等于 N 的标题为止（不含）」。例如，给定 Markdown 文档
+
+```markdown
+# 一级标题
+
+## 二级标题 1
+
+内容 1
+
+### 三级标题
+
+## 二级标题 2
+
+内容 2
+```
+
+则将生成两张卡片：
+
+- 第一张卡片正面为「二级标题 1」，背面为「内容 1」和「三级标题」
+- 第二张卡片正面为「二级标题 2」，背面为「内容 2」
 
 # 使用（超级笔记）
 
