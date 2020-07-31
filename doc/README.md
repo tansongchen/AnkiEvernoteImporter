@@ -16,13 +16,13 @@
 
 在印象笔记中新建超级笔记：
 
-![](https://gitee.com/tansongchen/ImageHost/raw/master/2020/07/30/12-44-30.png)
+![](images/createSuperNote.png)
 
 ## 从印象笔记导出
 
 在印象笔记中点击 `文件` - `导出笔记`，将笔记导出为 HTML 格式：
 
-![](https://gitee.com/tansongchen/ImageHost/raw/master/2020/07/30/12-45-18.png)
+![](images/exportSuperNote.png)
 
 ## 从 Anki 导入
 
@@ -34,13 +34,13 @@
 
 在印象笔记中新建 Markdown 笔记：
 
-![](https://gitee.com/tansongchen/ImageHost/raw/master/2020/07/30/12-46-38.png)
+![](images/createMarkdownNote.png)
 
 ## 从印象笔记导出
 
 在印象笔记中右键点击 Markdown 笔记的预览区，将笔记导出为 Markdown 格式：
 
-![](https://gitee.com/tansongchen/ImageHost/raw/master/2020/07/30/12-48-37.png)
+![](images/exportMarkdownNote.png)
 
 ## 从 Anki 导入
 

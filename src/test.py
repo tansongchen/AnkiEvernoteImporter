@@ -3,8 +3,8 @@
 '''
 
 from bs4 import BeautifulSoup
-from src.preprocessor import preprocess
-from src.qa import split, splitLegacy
+from preprocessor import preprocess
+from qa import split, splitLegacy
 
 with open('test/test.md') as f:
     md = f.read()
@@ -19,7 +19,13 @@ with open('test/test.html') as f:
     for qa in split(soup, 2):
         print(qa)
 
-with open('test/test.legacy.html') as f:
+with open('test/test.legacy.macOS.html') as f:
+    html = f.read()
+    soup = BeautifulSoup(html, 'html.parser')
+    for qa in splitLegacy(soup):
+        print(qa)
+
+with open('test/test.legacy.Windows.html') as f:
     html = f.read()
     soup = BeautifulSoup(html, 'html.parser')
     for qa in splitLegacy(soup):

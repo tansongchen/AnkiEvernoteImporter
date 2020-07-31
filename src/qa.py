@@ -11,19 +11,22 @@ class QA:
 
     def append(self, aTag):
         self.answer += str(aTag)
+    
+    def appendLegacy(self, tag, to):
+        if to == 'q':
+            self.question += str(tag)
+        else:
+            self.answer += str(tag)
 
     def __repr__(self):
-        return 'Q: %s\nA:%s\n' % (self.question, self.answer)
-
-    def __str__(self):
-        return 'Q: %s\nA:%s\n' % (self.question, self.answer)
+        return 'Q: %s\nA: %s\n' % (self.question, self.answer)
 
 def split(soup, level):
     qaList = []
     qName = 'h%d' % level
     parentNames = ['h%d' for i in range(1, level)]
     buffer = False
-    for child in soup.body.children:
+    for child in soup.body.find_all(recursive=False):
         if child.name in parentNames:
             buffer = False
         elif child.name == qName:
@@ -37,29 +40,26 @@ def splitLegacy(soup):
     '''
     按照定界符的规则划分笔记
     '''
-    QAList = []
+    qaList = []
     meta = soup.select_one('head meta[name="exporter-version"]')
     if meta and 'Mac' in meta['content']:
-        blockList = soup.select('body > *')
+        children = soup.body.find_all(recursive=False)
+    elif meta and 'Windows' in meta['content']:
+        children = soup.body.div.span.find_all(recursive=False)
     else:
-        blockList = soup.select('body > div > span > div > *')
-    QField, AField = '', ''
-    for block in blockList:
-        string = block.get_text().strip()
+        raise ValueError('不能识别笔记的来源')
+    to = 'q'
+    for child in children:
+        string = child.get_text().strip()
         if string[:2] in ['q:', 'Q:', 'q：', 'Q：']:
-            if (QField, AField) != ('', ''):
-                QAList.append((QField, AField))
-            QField = str(block)
-            AField = ''
+            qaList.append(QA(child))
+            to = 'q'
         elif string[:2] in ['a:', 'A:', 'a：', 'A：']:
-            AField = str(block)
+            to = 'a'
+            qaList[-1].appendLegacy(child, to)
         else:
-            if AField:
-                AField = AField + str(block)
-            elif QField:
-                QField = QField + str(block)
-    QAList.append((QField, AField))
-    return QAList
+            if qaList: qaList[-1].appendLegacy(child, to)
+    return qaList
 
 def updateMedia(soup, audioDict, picsDict):
     for mediaRelativePath, mediaName in audioDict.items():

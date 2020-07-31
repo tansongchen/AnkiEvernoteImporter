@@ -176,7 +176,8 @@ def extractFrom(fileName, level):
                     picsDict[mediaRelativePath] = mediaName
         soup = BeautifulSoup(text, 'html.parser')
         updateMedia(soup, audioDict, picsDict)
-        if soup.select_one('head meta[name="content-class"]')['content'] == 'yinxiang.superNote':
+        meta = soup.select_one('head meta[name="content-class"]')
+        if meta and meta['content'] == 'yinxiang.superNote':
             return split(soup, level)
         else:
             return splitLegacy(soup)
