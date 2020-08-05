@@ -183,11 +183,13 @@ def extractFrom(fileName, level):
                     picsDict[newMediaPath] = oldMediaPathList
         soup = BeautifulSoup(text, 'html.parser')
         updateMedia(soup, audioDict, picsDict)
-        meta = soup.select_one('head meta[name="content-class"]')
-        if meta and meta['content'] == 'yinxiang.superNote':
+        contentClassMeta = soup.select_one('head meta[name="content-class"]')
+        if contentClassMeta and contentClassMeta['content'] == 'yinxiang.superNote':
             return split(soup, level)
-        else:
-            return splitLegacy(soup)
+        sourceMeta = soup.select_one('head meta[name="source"]')
+        if sourceMeta and sourceMeta['content'] == 'yinxiang.superNote':
+            return split(soup, level)
+        return splitLegacy(soup)
     elif fileExt == '.md':
         html = preprocess(text)
         soup = BeautifulSoup(html, 'html.parser')

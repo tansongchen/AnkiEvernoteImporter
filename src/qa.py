@@ -20,13 +20,16 @@ class QA:
         return 'Q: %s\nA: %s\n' % (self.question, self.answer)
 
 def getChildren(soup):
-    meta = soup.select_one('head meta[name="exporter-version"]')
-    if meta and 'Mac' in meta['content']:
+    if soup.head: # HTML
+        meta = soup.select_one('head meta[name="exporter-version"]')
+        if meta and 'Mac' in meta['content']:
+            return soup.body.find_all(recursive=False)
+        elif meta and 'Windows' in meta['content']:
+            return soup.body.div.span.find_all(recursive=False)
+        else:
+            raise ValueError('不能识别笔记的来源')
+    else: # Markdown
         return soup.body.find_all(recursive=False)
-    elif meta and 'Windows' in meta['content']:
-        return soup.body.div.span.find_all(recursive=False)
-    else:
-        raise ValueError('不能识别笔记的来源')
 
 def split(soup, level):
     '''
